@@ -4,8 +4,15 @@
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
+# Prefer a system-installed Gradle over the wrapper, so a slow/blocked download of the
+# wrapper's Gradle distribution never blocks this script once any working "gradle" is on PATH.
+GRADLE_CMD="./gradlew"
+if command -v gradle >/dev/null 2>&1; then
+    GRADLE_CMD="gradle"
+fi
+
 echo "==> Running :core unit tests (sign classification, temporal decoding, Qwen prompt/JSON contract)"
-./gradlew :core:test
+$GRADLE_CMD :core:test
 
 if ! command -v adb >/dev/null 2>&1; then
     echo
@@ -23,7 +30,7 @@ fi
 
 echo
 echo "==> Building and installing the debug app"
-./gradlew :app:installDebug
+$GRADLE_CMD :app:installDebug
 
 echo "==> Launching Mudra"
 adb shell am start -n com.pisquarelabs.mudra/.MainActivity

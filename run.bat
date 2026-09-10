@@ -2,8 +2,15 @@
 setlocal
 cd /d "%~dp0"
 
+rem Prefer a system-installed Gradle (e.g. one you extracted by hand) over the wrapper, so a
+rem slow/blocked download of the wrapper's Gradle distribution never blocks this script once
+rem any working "gradle" is on PATH.
+set GRADLE_CMD=gradlew.bat
+where gradle >nul 2>nul
+if not errorlevel 1 set GRADLE_CMD=gradle
+
 echo ==^> Running :core unit tests (sign classification, temporal decoding, Qwen prompt/JSON contract)
-call gradlew.bat :core:test
+call %GRADLE_CMD% :core:test
 if errorlevel 1 goto :fail
 
 where adb >nul 2>nul
@@ -24,7 +31,7 @@ if errorlevel 1 (
 
 echo.
 echo ==^> Building and installing the debug app
-call gradlew.bat :app:installDebug
+call %GRADLE_CMD% :app:installDebug
 if errorlevel 1 goto :fail
 
 echo ==^> Launching Mudra
