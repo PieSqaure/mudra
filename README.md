@@ -63,13 +63,25 @@ not per camera frame - see `core/src/main/kotlin/.../temporal/TemporalDecoder.kt
 
 ## Run it
 
+macOS/Linux (or Windows via Git Bash/WSL):
 ```
 ./run.sh
 ```
 
-One script: always runs `:core:test`, then - only if `adb` is on `PATH` and a device/emulator
-is connected - builds, installs, and launches `:app` on it. Safe to run anywhere; it just skips
-the app step with a clear message when there's no Android SDK/device (as in this sandbox).
+Windows (double-click, or from Command Prompt/PowerShell):
+```
+run.bat
+```
+
+Double-clicking `run.sh` in Windows Explorer does nothing useful - Windows has no shell
+associated with `.sh` files, so it just opens it as text. Use `run.bat` there instead (or run
+`run.sh` from Git Bash/WSL, which do understand it).
+
+Either script does the same thing: always runs `:core:test`, then - only if `adb` is on `PATH`
+and a device/emulator is connected - builds, installs, and launches `:app` on it. Safe to run
+anywhere; it just skips the app step with a clear message when there's no Android SDK/device
+(as in the sandbox this project was built in). `run.bat` also pauses at the end so the window
+stays open when double-clicked.
 
 ## Building
 
