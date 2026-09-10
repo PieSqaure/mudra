@@ -61,6 +61,16 @@ not per camera frame - see `core/src/main/kotlin/.../temporal/TemporalDecoder.kt
 | TTS | Real (Android `TextToSpeech`) |
 | Telecom / call actions | Not implemented - out of scope for this pass; the `LanguageReasoner` -> `ResolvedUtterance` seam is where a future `InCallService` integration would hook in, downstream of everything here |
 
+## Run it
+
+```
+./run.sh
+```
+
+One script: always runs `:core:test`, then - only if `adb` is on `PATH` and a device/emulator
+is connected - builds, installs, and launches `:app` on it. Safe to run anywhere; it just skips
+the app step with a clear message when there's no Android SDK/device (as in this sandbox).
+
 ## Building
 
 Building `:app` requires Android Studio (or a standalone Android SDK) with API 34 installed:
