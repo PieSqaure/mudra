@@ -1,6 +1,5 @@
-plugins {
-    id("com.android.application") version "8.5.2" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.24" apply false
-    id("com.google.devtools.ksp") version "1.9.24-1.0.20" apply false
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.24" apply false
-}
+// Intentionally empty: plugin versions are resolved via pluginManagement.plugins in
+// settings.gradle.kts instead of `apply false` here. That way, Gradle only needs to touch
+// Google's Maven repo (for the Android Gradle Plugin) when a task actually configures the
+// :app module - `./gradlew :core:test` never does, so the pure-Kotlin :core module builds
+// and tests even in environments without access to the Android SDK/AGP.

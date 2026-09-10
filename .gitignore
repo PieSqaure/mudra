@@ -3,11 +3,10 @@
 /local.properties
 .idea/
 .DS_Store
-/build
 /captures
 .externalNativeBuild
 .cxx
-app/build/
+build/
 app/release/
 *.apk
 *.aab

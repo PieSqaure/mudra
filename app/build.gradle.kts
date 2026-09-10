@@ -51,6 +51,9 @@ android {
 }
 
 dependencies {
+    // Framework-independent pipeline logic (sign classification, temporal decoding, Qwen contract)
+    implementation(project(":core"))
+
     // Core / Compose
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")

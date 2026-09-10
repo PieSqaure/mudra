@@ -28,23 +28,19 @@ class HeuristicSignClassifier : SignClassifier {
         val thumbTip = lm[4]
         val thumbMcp = lm[2]
         val indexTip = lm[8]
-        val indexPip = lm[6]
         val indexMcp = lm[5]
         val middleTip = lm[12]
-        val middlePip = lm[10]
         val middleMcp = lm[9]
         val ringTip = lm[16]
-        val ringPip = lm[14]
         val ringMcp = lm[13]
         val pinkyTip = lm[20]
-        val pinkyPip = lm[18]
         val pinkyMcp = lm[17]
 
-        val indexExt = extension(wrist, indexMcp, indexPip, indexTip)
-        val middleExt = extension(wrist, middleMcp, middlePip, middleTip)
-        val ringExt = extension(wrist, ringMcp, ringPip, ringTip)
-        val pinkyExt = extension(wrist, pinkyMcp, pinkyPip, pinkyTip)
-        val thumbExt = extension(wrist, thumbMcp, thumbMcp, thumbTip)
+        val indexExt = extension(wrist, indexMcp, indexTip)
+        val middleExt = extension(wrist, middleMcp, middleTip)
+        val ringExt = extension(wrist, ringMcp, ringTip)
+        val pinkyExt = extension(wrist, pinkyMcp, pinkyTip)
+        val thumbExt = extension(wrist, thumbMcp, thumbTip)
 
         val handScale = distance(wrist, middleMcp).coerceAtLeast(1e-3f)
         val thumbIndexTouching = distance(thumbTip, indexTip) / handScale < 0.35f
@@ -86,7 +82,7 @@ class HeuristicSignClassifier : SignClassifier {
     }
 
     /** ~1 when the finger is clearly extended, ~0 when curled, smooth in between. */
-    private fun extension(wrist: HandLandmark, mcp: HandLandmark, pip: HandLandmark, tip: HandLandmark): Float {
+    private fun extension(wrist: HandLandmark, mcp: HandLandmark, tip: HandLandmark): Float {
         val wristToTip = distance(wrist, tip)
         val wristToMcp = distance(wrist, mcp).coerceAtLeast(1e-3f)
         val ratio = wristToTip / wristToMcp

@@ -66,4 +66,58 @@ class TemporalDecoderTest {
 
         assertEquals(TemporalDecoder.Event.None, event)
     }
+
+    @Test
+    fun `an interruption resets the stability run so it must start over`() {
+        var now = 0L
+        val decoder = TemporalDecoder(stabilityFrameCount = 3, pauseMs = 500L, clock = { now })
+
+        // NEED, NEED interrupted by HELP: the two leading NEEDs must not count towards stability.
+        decoder.onCandidates(candidates("NEED"))
+        decoder.onCandidates(candidates("NEED"))
+        decoder.onCandidates(candidates("HELP"))
+        decoder.onCandidates(candidates("NEED"))
+        decoder.onCandidates(candidates("NEED"))
+        now += 600L
+        val event = decoder.onNoCandidates()
+
+        // Only two NEEDs followed the interruption, short of the stabilityFrameCount of 3.
+        assertEquals(TemporalDecoder.Event.None, event)
+    }
+
+    @Test
+    fun `forceFlush emits whatever phrase has accumulated so far`() {
+        var now = 0L
+        val decoder = TemporalDecoder(stabilityFrameCount = 2, pauseMs = 500L, clock = { now })
+
+        repeat(2) { decoder.onCandidates(candidates("HELP")) }
+        val event = decoder.forceFlush()
+
+        assertTrue(event is TemporalDecoder.Event.PhraseReady)
+        assertEquals(listOf("HELP"), (event as TemporalDecoder.Event.PhraseReady).sequence.frames.map { it.candidates.first().gloss })
+    }
+
+    @Test
+    fun `forceFlush on an empty phrase buffer is a no-op`() {
+        val decoder = TemporalDecoder()
+        assertEquals(TemporalDecoder.Event.None, decoder.forceFlush())
+    }
+
+    @Test
+    fun `after a phrase is flushed the decoder starts a fresh phrase cleanly`() {
+        var now = 0L
+        val decoder = TemporalDecoder(stabilityFrameCount = 2, pauseMs = 500L, clock = { now })
+
+        repeat(2) { decoder.onCandidates(candidates("HELP")) }
+        now += 600L
+        decoder.onNoCandidates() // flush #1
+
+        now += 100L
+        repeat(2) { decoder.onCandidates(candidates("YES")) }
+        now += 600L
+        val secondEvent = decoder.onNoCandidates()
+
+        val sequence = (secondEvent as TemporalDecoder.Event.PhraseReady).sequence
+        assertEquals(listOf("YES"), sequence.frames.map { it.candidates.first().gloss })
+    }
 }

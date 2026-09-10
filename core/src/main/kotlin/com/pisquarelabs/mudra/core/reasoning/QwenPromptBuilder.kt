@@ -17,7 +17,7 @@ private val prettyJson = Json { prettyPrint = true }
  */
 object QwenPromptBuilder {
 
-    private const val SYSTEM_INSTRUCTIONS = """
+    private val SYSTEM_INSTRUCTIONS = """
 You are the language reconstruction engine
 for an accessibility communication device.
 
