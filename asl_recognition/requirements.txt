@@ -1,0 +1,4 @@
+# Deliverable 1 (landmark extraction). Everything here is Apache-2.0 / BSD / MIT.
+mediapipe>=0.10
+opencv-python>=4.8
+numpy>=1.24
